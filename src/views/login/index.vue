@@ -181,7 +181,7 @@ $light_gray:#eee;
   min-height: 100%;
   width: 100%;
   //background-color: $bg;
-  background: url(~@/assets/img.jpg);
+  background: url(~@/assets/img.jpg); //修改登录背景颜色
   overflow: hidden;
 
   .login-form {
