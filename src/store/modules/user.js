@@ -1,6 +1,7 @@
 import { login, logout, getInfo } from '@/api/user'
 import { getToken, setToken, removeToken } from '@/utils/auth'
 import { resetRouter } from '@/router'
+import dialog from 'element-ui/packages/dialog'
 
 const getDefaultState = () => {
   return {
@@ -29,18 +30,33 @@ const mutations = {
 
 const actions = {
   // user login
-  login({ commit }, userInfo) {
+
+  async login({ commit }, userInfo) {
     const { username, password } = userInfo
-    return new Promise((resolve, reject) => {
-      login({ username: username.trim(), password: password }).then(response => {
-        const { data } = response
-        commit('SET_TOKEN', data.token)
-        setToken(data.token)
-        resolve()
-      }).catch(error => {
-        reject(error)
-      })
-    })
+    // 使用async 和 await
+    const res = await login({ username: username.trim(), password: password })
+    console.log(res)
+    if (res.code === 20000) {
+      const { token } = res.data
+      commit('SET_TOKEN', token)
+      // 持久化
+      setToken(token)
+      return 'ok'
+    } else {
+      return Promise.reject(new Error('faile'))
+    }
+
+    // const { username, password } = userInfo
+    // return new Promise((resolve, reject) => {
+    //   login({ username: username.trim(), password: password }).then(response => {
+    //     const { data } = response
+    //     commit('SET_TOKEN', data.token)
+    //     setToken(data.token)
+    //     resolve()
+    //   }).catch(error => {
+    //     reject(error)
+    //   })
+    // })
   },
 
   // get user info
